@@ -1,0 +1,39 @@
+terraform {
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "4.51.0"
+    }
+  }
+}
+
+provider "google" {
+  credentials = file("credentials.json")
+  project = "polar-lead-428621-j3"
+  region = "us-central1"
+  zone = "us-central1-a"
+}
+
+
+resource "google_compute_instance" "vmteste" {
+  name = "vmteste"
+  machine_type = "e2-micro"
+  zone         = "us-central1-a"
+
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2004-lts"
+      }
+    }
+
+  network_interface {
+    network = "default"
+
+    access_config {
+      // Ephemeral public IP
+    }
+  }
+
+  metadata_startup_script = "echo oi > /test.txt"
+
+}
